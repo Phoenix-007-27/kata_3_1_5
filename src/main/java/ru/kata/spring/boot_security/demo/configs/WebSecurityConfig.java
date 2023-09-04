@@ -7,9 +7,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import ru.kata.spring.boot_security.demo.services.MyUserDetailsService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
@@ -17,7 +16,7 @@ import ru.kata.spring.boot_security.demo.services.UserService;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private UserService userService;
+
     private MyUserDetailsService myUserDetailsService;
 
         private final SuccessUserHandler successUserHandler;
@@ -26,21 +25,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.successUserHandler = successUserHandler;
     }
     @Autowired
-    public WebSecurityConfig(UserService userService, MyUserDetailsService myUserDetailsService, SuccessUserHandler successUserHandler) {
-        this.userService = userService;
+    public WebSecurityConfig(MyUserDetailsService myUserDetailsService, SuccessUserHandler successUserHandler) {
+
         this.myUserDetailsService = myUserDetailsService;
         this.successUserHandler = successUserHandler;
     }
 
-    //
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-
                 .authorizeRequests()
                 .antMatchers("/admin").hasRole("ADMIN")
-//                .antMatchers("/user").hasRole("USER")
-
                 .antMatchers("/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -48,39 +43,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/process_login")
                 .defaultSuccessUrl("/admin", true)
                 .successHandler(successUserHandler)
-//                .failureUrl("/auth/login?error")
                 .and()
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login");
 
-
     }
-
-    // аутентификация inMemory
-//    @Bean
-//    @Override
-//    public UserDetailsService userDetailsService() {
-//
-//        return new UserDetailsService() {
-//            @Override
-//            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//                UserDetails user = userService.findByName(username);
-//                return new User(user.getUsername(), user.getPassword(), user.getAuthorities());
-//                }
-//            };
-//        };
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(myUserDetailsService);
-
-
+        auth.userDetailsService(myUserDetailsService)
+                .passwordEncoder(getPasswordEncoder());
     }
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 }
 

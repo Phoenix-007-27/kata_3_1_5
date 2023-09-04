@@ -9,19 +9,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import org.springframework.web.server.ResponseStatusException;
-import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
-
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.Collection;
 
-
 @Controller
-
 public class PeopleController {
 
     private final UserService userService;
