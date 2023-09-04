@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
+
 import javax.validation.Valid;
 import java.util.Collection;
 
@@ -36,9 +37,7 @@ public class PeopleController {
         String username = authentication.getName();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         model.addAttribute("user", userService.findById(id));
-        if (authorities.stream().anyMatch(role -> "ROLE_ADMIN".equals(role.getAuthority()))) {
-            return "show";
-        } else if (userService.findByName(username).getId() == id) {
+        if (authorities.stream().anyMatch(role -> "ROLE_ADMIN".equals(role.getAuthority())) || userService.findByName(username).getId() == id) {
             return "show";
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
