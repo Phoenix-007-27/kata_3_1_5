@@ -47,6 +47,7 @@ public class UserServiceImpl
     }
 
     @Override
+
     public User findByName(String name) {
         return userDao.findByName(name);
     }

@@ -15,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "User")
-public class User implements UserDetails {
+public class User   {
 
 
     @Id
@@ -25,46 +25,18 @@ public class User implements UserDetails {
 
     @NotEmpty(message = "name should not be empty")
     @Size(min = 2, max = 20, message = "min 2 and max 10 letters")
-
     @Column(name = "username")
     private String username;
 
     @Column(name = "password")
     private String password;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     @Column
     private int age;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<Role> roles = new ArrayList<>();
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return username;
-    }
-
-    public void setName(String name) {
-        this.username = name;
-    }
 
     public User() {
 
@@ -87,40 +59,43 @@ public class User implements UserDetails {
         this.username = name;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        return getRoles();
-
+    public int getId() {
+        return id;
     }
 
-    @Override
-    public String getPassword() {
-        return password;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    @Override
     public String getUsername() {
         return username;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

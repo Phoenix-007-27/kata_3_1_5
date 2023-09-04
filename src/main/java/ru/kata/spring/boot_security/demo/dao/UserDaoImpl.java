@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.dao;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,8 +11,11 @@ import ru.kata.spring.boot_security.demo.model.User;
 
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -49,15 +53,27 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void update(int id, User newUser) {
         User toUpdateUser = entityManager.find(User.class, id);
-        toUpdateUser.setName(newUser.getName());
+        toUpdateUser.setUsername(newUser.getUsername());
         toUpdateUser.setAge(newUser.getAge());
 
 
     }
 
     @Override
+
     public User findByName(String username) {
-        return entityManager.find(User.class, username);
+
+        Query query = entityManager.createQuery("Select u from User u left join fetch u.roles where u.username=:username");
+
+        query.setParameter("username", username);
+
+        List<User> users = query.getResultList();
+
+        if (!users.isEmpty()) {
+            return users.get(0);
+        } else {
+            return null;
+        }
     }
 
     @Override

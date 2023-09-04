@@ -3,18 +3,14 @@ package ru.kata.spring.boot_security.demo.configs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import ru.kata.spring.boot_security.demo.services.MyUserDetailsService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
 @Configuration
@@ -22,51 +18,71 @@ import ru.kata.spring.boot_security.demo.services.UserService;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserService userService;
+    private MyUserDetailsService myUserDetailsService;
 
-//    private final SuccessUserHandler successUserHandler;
-//
-//    public WebSecurityConfig(SuccessUserHandler successUserHandler) {
-//        this.successUserHandler = successUserHandler;
-//    }
-        @Autowired
-        public WebSecurityConfig(UserService userService){
-            this.userService = userService;
+        private final SuccessUserHandler successUserHandler;
 
-        }
+    public WebSecurityConfig(SuccessUserHandler successUserHandler) {
+        this.successUserHandler = successUserHandler;
+    }
+    @Autowired
+    public WebSecurityConfig(UserService userService, MyUserDetailsService myUserDetailsService, SuccessUserHandler successUserHandler) {
+        this.userService = userService;
+        this.myUserDetailsService = myUserDetailsService;
+        this.successUserHandler = successUserHandler;
+    }
 
+    //
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
 
                 .authorizeRequests()
-//                .antMatchers("/user").hasRole("USER, ADMIN")
+                .antMatchers("/admin").hasRole("ADMIN")
+//                .antMatchers("/user").hasRole("USER")
 
-                .antMatchers("/**").permitAll()
+                .antMatchers("/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
-//                .formLogin().successHandler(successUserHandler)
-//                .permitAll()
-//                .and()
+                .formLogin().loginPage("/login")
+                .loginProcessingUrl("/process_login")
+                .defaultSuccessUrl("/admin", true)
+                .successHandler(successUserHandler)
+//                .failureUrl("/auth/login?error")
+                .and()
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
-                .permitAll();
+                .logoutSuccessUrl("/login");
+
+
     }
 
     // аутентификация inMemory
-    @Bean
-    @Override
-    public UserDetailsService userDetailsService() {
+//    @Bean
+//    @Override
+//    public UserDetailsService userDetailsService() {
+//
+//        return new UserDetailsService() {
+//            @Override
+//            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//                UserDetails user = userService.findByName(username);
+//                return new User(user.getUsername(), user.getPassword(), user.getAuthorities());
+//                }
+//            };
+//        };
 
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                UserDetails user = userService.findByName(username);
-                return new User(user.getUsername(), user.getPassword(), user.getAuthorities());
-                }
-            };
-        };
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(myUserDetailsService);
+
+
     }
+
+    @Bean
+    public PasswordEncoder getPasswordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
+}
 
 
 
