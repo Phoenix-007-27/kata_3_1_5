@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="ISO-8859-1">
+  <title>My app</title>
+</head>
+
+<body>
+
+<p th:text="${user.getName()} "></p>
+<p th:text="${user.getId()}"></p>
+<p th:text="${user.getAge()}"></p>
+
+
+<!--<a th:href="@{/newparam(param=${name})}">new controller</a>-->
+
+</body>
+
+</html>

@@ -11,14 +11,16 @@ import javax.persistence.Table;
 @Table(name = "role")
 public class Role implements GrantedAuthority {
 
+
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
 
     @Column(name = "role")
     private String role;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
@@ -48,6 +50,6 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return null;
+        return role;
     }
 }

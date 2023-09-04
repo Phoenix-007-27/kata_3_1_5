@@ -1,14 +1,21 @@
 package ru.kata.spring.boot_security.demo.model;
 
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
 @Table(name = "User")
-public class User {
+public class User implements UserDetails {
 
 
     @Id
@@ -19,14 +26,21 @@ public class User {
     @NotEmpty(message = "name should not be empty")
     @Size(min = 2, max = 20, message = "min 2 and max 10 letters")
 
-    @Column
-    private String name;
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "password")
+    private String password;
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     @Column
     private int age;
 
-    @OneToMany(mappedBy = "user")
-    List<Role> roles;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<Role> roles = new ArrayList<>();
 
     public int getAge() {
         return age;
@@ -45,11 +59,11 @@ public class User {
     }
 
     public String getName() {
-        return name;
+        return username;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.username = name;
     }
 
     public User() {
@@ -64,7 +78,49 @@ public class User {
         this.roles = roles;
     }
 
+    public void addRoles(Role role){
+        roles.add(role);
+        role.setUser(this);
+    }
+
     public User(String name) {
-        this.name = name;
+        this.username = name;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        return getRoles();
+
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

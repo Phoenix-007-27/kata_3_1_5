@@ -15,7 +15,7 @@ import javax.validation.Valid;
 
 
 @Controller
-@RequestMapping("/people")
+
 public class PeopleController {
 
     private final UserService userService;
@@ -25,53 +25,53 @@ public class PeopleController {
         this.userService = peopleServece;
     }
 
-    @GetMapping()
+    @GetMapping("/admin")
     public String findAll(Model model) {
         model.addAttribute("users", userService.findAll());
         return "index";
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/user/{id}")
     public String findById(@PathVariable("id") int id, Model model) {
         model.addAttribute("user", userService.findById(id));
         return "show";
     }
 
-    @GetMapping(value = "/create")
+    @GetMapping(value = "/admin/create")
     public String form(@ModelAttribute("user") User user) {
         return "formTL";
     }
 
 
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/admin/create")
     public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "formTL";
         }
         userService.save(user);
-        return "redirect:/people";
+        return "redirect:/admin";
     }
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("/admin/{id}/edit")
     public String edit(@PathVariable("id") int id, Model model) {
 
         model.addAttribute("user", userService.findById(id));
         return "edit";
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/admin/{id}")
     public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, @PathVariable("id") int id) {
         if (bindingResult.hasErrors()) {
             return "edit";
         }
         userService.update(id, user);
-        return "redirect:/people";
+        return "redirect:/admin";
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public String delete(@PathVariable("id") int id) {
         userService.delete(id);
-        return "redirect:/people";
+        return "redirect:/admin";
 
     }
 }
