@@ -42,14 +42,12 @@ public class PeopleController {
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-
     }
 
     @GetMapping(value = "/admin/create")
     public String form(@ModelAttribute("user") User user) {
         return "formTL";
     }
-
 
     @PostMapping(value = "/admin/create")
     public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {

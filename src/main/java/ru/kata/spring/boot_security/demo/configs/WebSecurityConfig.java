@@ -10,20 +10,19 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.kata.spring.boot_security.demo.services.MyUserDetailsService;
-import ru.kata.spring.boot_security.demo.services.UserService;
+
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-
     private MyUserDetailsService myUserDetailsService;
-
-        private final SuccessUserHandler successUserHandler;
+    private final SuccessUserHandler successUserHandler;
 
     public WebSecurityConfig(SuccessUserHandler successUserHandler) {
         this.successUserHandler = successUserHandler;
     }
+
     @Autowired
     public WebSecurityConfig(MyUserDetailsService myUserDetailsService, SuccessUserHandler successUserHandler) {
 
@@ -47,7 +46,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login");
-
     }
 
     @Override

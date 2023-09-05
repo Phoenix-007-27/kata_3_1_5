@@ -22,13 +22,11 @@ import java.util.List;
 public class UserDaoImpl implements UserDao {
 
     private EntityManager entityManager;
-    private PasswordEncoder passwordEncoder;
-
 
     @Autowired
-    public UserDaoImpl(EntityManager entityManager, @Lazy PasswordEncoder passwordEncoder) {
+    public UserDaoImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
-        this.passwordEncoder = passwordEncoder;
+
     }
 
     @Override
@@ -40,7 +38,6 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User showById(int id) {
         return entityManager.find(User.class, id);
-
     }
 
     @Override
@@ -48,7 +45,7 @@ public class UserDaoImpl implements UserDao {
         Role role = new Role();
         role.setRole("ROLE_USER");
         user.addRoles(role);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         entityManager.persist(user);
     }
 
@@ -57,6 +54,8 @@ public class UserDaoImpl implements UserDao {
         User toUpdateUser = entityManager.find(User.class, id);
         toUpdateUser.setUsername(newUser.getUsername());
         toUpdateUser.setAge(newUser.getAge());
+        toUpdateUser.setPassword(newUser.getPassword());
+
 
     }
 

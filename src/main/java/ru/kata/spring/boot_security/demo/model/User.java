@@ -1,18 +1,15 @@
 package ru.kata.spring.boot_security.demo.model;
 
 
-
-
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "User")
-public class User   {
-
+public class User {
 
     @Id
     @Column
@@ -31,22 +28,21 @@ public class User   {
     private int age;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    List<Role> roles = new ArrayList<>();
-
+    Set<Role> roles = new HashSet<>();
 
     public User() {
 
     }
 
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
-    public void addRoles(Role role){
+    public void addRoles(Role role) {
         roles.add(role);
         role.setUser(this);
     }
