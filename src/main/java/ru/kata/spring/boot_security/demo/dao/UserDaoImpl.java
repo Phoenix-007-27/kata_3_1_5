@@ -14,7 +14,9 @@ import ru.kata.spring.boot_security.demo.model.User;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Repository
@@ -45,7 +47,6 @@ public class UserDaoImpl implements UserDao {
         Role role = new Role();
         role.setRole("ROLE_USER");
         user.addRoles(role);
-
         entityManager.persist(user);
     }
 

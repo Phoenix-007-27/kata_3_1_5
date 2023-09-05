@@ -28,7 +28,7 @@ public class User {
     private int age;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
     public User() {
 
@@ -39,11 +39,12 @@ public class User {
     }
 
     public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+
     }
 
     public void addRoles(Role role) {
-        roles.add(role);
+
+        roles = new HashSet<>(Set.of(role));
         role.setUser(this);
     }
 
