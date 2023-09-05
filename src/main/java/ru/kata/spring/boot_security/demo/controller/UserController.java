@@ -17,12 +17,12 @@ import javax.validation.Valid;
 import java.util.Collection;
 
 @Controller
-public class PeopleController {
+public class UserController {
 
     private final UserService userService;
 
     @Autowired
-    private PeopleController(UserService peopleServece) {
+    private UserController(UserService peopleServece) {
         this.userService = peopleServece;
     }
 

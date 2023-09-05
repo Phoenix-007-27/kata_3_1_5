@@ -4,27 +4,20 @@
     <meta charset="ISO-8859-1">
     <title>My app</title>
 </head>
-
 <body>
 <div th:each="user : ${users}">
-<div th:each="role : ${user.getRoles()}">
-    <p th:text="${role.getRole()}"></p>
-</div>
+    <div th:each="role : ${user.getRoles()}">
+        <p th:text="${role.getRole()}"></p>
+    </div>
     <a th:href="@{/user/{id}(id=${user.getId()})}" th:text="${user.getUsername()} +' ' + ${user.getAge()}">person </a>
-
     <form th:method="DELETE" th:action="@{/admin/{id}(id=${user.getId()})}">
         <input type="submit" value="delete person"/>
     </form>
-
     <form th:action="@{/admin/{id}/edit(id=${user.getId()})}">
         <input type="submit" value="edit person"/>
     </form>
-
 </div>
 <a href="/admin/create">add new person</a>
-<!--<form th:action="@{/logout}" th:method="POST">-->
-<!--    <input type="submit" value="Logout" />-->
-<!--</form>-->
 <div th:insert="~{fragments :: logout}"></div>
 </body>
 

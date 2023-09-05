@@ -4,7 +4,6 @@ package ru.kata.spring.boot_security.demo.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -27,7 +26,11 @@ public class User {
     @Column
     private int age;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
     public User() {
@@ -39,13 +42,7 @@ public class User {
     }
 
     public void setRoles(Set<Role> roles) {
-
-    }
-
-    public void addRoles(Role role) {
-
-        roles = new HashSet<>(Set.of(role));
-        role.setUser(this);
+        this.roles = roles;
     }
 
     public User(String name) {

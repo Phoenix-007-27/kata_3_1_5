@@ -24,11 +24,12 @@ import java.util.Set;
 public class UserDaoImpl implements UserDao {
 
     private EntityManager entityManager;
+    private RoleDaoImpl roleDao;
 
     @Autowired
-    public UserDaoImpl(EntityManager entityManager) {
+    public UserDaoImpl(EntityManager entityManager, RoleDaoImpl roleDao) {
         this.entityManager = entityManager;
-
+        this.roleDao = roleDao;
     }
 
     @Override
@@ -44,9 +45,9 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void create(User user) {
-        Role role = new Role();
-        role.setRole("ROLE_USER");
-        user.addRoles(role);
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleDao.findById(1));
+        user.setRoles(roles);
         entityManager.persist(user);
     }
 
@@ -56,8 +57,6 @@ public class UserDaoImpl implements UserDao {
         toUpdateUser.setUsername(newUser.getUsername());
         toUpdateUser.setAge(newUser.getAge());
         toUpdateUser.setPassword(newUser.getPassword());
-
-
     }
 
     @Override
