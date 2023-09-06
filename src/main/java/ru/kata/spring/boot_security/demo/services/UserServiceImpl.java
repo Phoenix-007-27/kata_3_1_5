@@ -44,7 +44,9 @@ public class UserServiceImpl
     @Override
     public void update(int id, User newUser) {
         newUser.setId(id);
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        if(!newUser.getPassword().equals(userDao.showById(id).getPassword())){
+            newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        }
         userDao.update(id, newUser);
     }
 

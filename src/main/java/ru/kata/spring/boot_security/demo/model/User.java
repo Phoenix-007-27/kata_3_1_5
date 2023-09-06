@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.model;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Set;
@@ -10,15 +11,21 @@ import java.util.Set;
 @Table(name = "User")
 public class User {
 
+
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotEmpty(message = "name should not be empty")
-    @Size(min = 2, max = 20, message = "min 2 and max 10 letters")
     @Column(name = "username")
     private String username;
+
+    @Column(name = "lastname")
+    private String lastname;
+
+    @Column(name = "email")
+    private String email;
+
 
     @Column(name = "password")
     private String password;
@@ -35,6 +42,38 @@ public class User {
 
     public User() {
 
+    }
+
+    public User(String username, String lastname, String email, String password, int age, Set<Role> roles) {
+        this.username = username;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.age = age;
+        this.roles = roles;
+    }
+
+
+    public String roleToString() {
+        StringBuilder strRole = new StringBuilder();
+        roles.stream().map(Role::getRole).forEach(s -> strRole.append(s).append(" "));
+        return strRole.toString();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public Set<Role> getRoles() {
@@ -81,11 +120,4 @@ public class User {
         this.age = age;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
 }

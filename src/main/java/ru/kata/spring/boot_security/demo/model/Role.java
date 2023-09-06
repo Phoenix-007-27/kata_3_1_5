@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.*;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -60,5 +61,18 @@ public class Role implements GrantedAuthority {
     @Override
     public String getAuthority() {
         return role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role1 = (Role) o;
+        return Id == role1.Id && Objects.equals(role, role1.role) && Objects.equals(users, role1.users);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Id, role, users);
     }
 }

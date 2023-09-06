@@ -13,7 +13,6 @@ import java.util.List;
 
 
 @Repository
-@Transactional
 public class RoleDaoImpl implements RoleDao {
 
     private EntityManager entityManager;
@@ -26,6 +25,11 @@ public class RoleDaoImpl implements RoleDao {
     @Override
     public Role findById(int id) {
         return entityManager.find(Role.class, id);
+    }
+
+    @Override
+    public List<Role> findAll() {
+        return entityManager.createQuery("from Role ").getResultList();
     }
 
 

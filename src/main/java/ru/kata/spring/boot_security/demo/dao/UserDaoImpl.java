@@ -20,7 +20,6 @@ import java.util.Set;
 
 
 @Repository
-@Transactional
 public class UserDaoImpl implements UserDao {
 
     private EntityManager entityManager;
@@ -45,9 +44,6 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void create(User user) {
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleDao.findById(1));
-        user.setRoles(roles);
         entityManager.persist(user);
     }
 
@@ -55,8 +51,11 @@ public class UserDaoImpl implements UserDao {
     public void update(int id, User newUser) {
         User toUpdateUser = entityManager.find(User.class, id);
         toUpdateUser.setUsername(newUser.getUsername());
+        toUpdateUser.setLastname(newUser.getLastname());
         toUpdateUser.setAge(newUser.getAge());
         toUpdateUser.setPassword(newUser.getPassword());
+        toUpdateUser.setEmail(newUser.getEmail());
+        toUpdateUser.setRoles(newUser.getRoles());
     }
 
     @Override
