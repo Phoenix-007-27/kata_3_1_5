@@ -26,14 +26,13 @@ public class User {
     @Column(name = "email")
     private String email;
 
-
     @Column(name = "password")
     private String password;
 
     @Column
     private int age;
 
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -52,7 +51,6 @@ public class User {
         this.age = age;
         this.roles = roles;
     }
-
 
     public String roleToString() {
         StringBuilder strRole = new StringBuilder();

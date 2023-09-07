@@ -66,7 +66,6 @@
                     <div class="col-md-10  ">
                         <h3>Add new user</h3>
 <form th:method="POST" th:action="@{/admin/create}" th:object="${user}">
-    <input type="hidden" th:field="*{id}" id="id">
     <div class="mb-3">
         <label for="newUsername" class="form-label">First name</label>
         <input type="text" th:field="*{username}" class="form-control" id="newUsername"

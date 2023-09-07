@@ -9,7 +9,6 @@ import ru.kata.spring.boot_security.demo.services.StringToRoleConverter;
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 
-
     private final StringToRoleConverter stringToRoleConverter;
 
     public MvcConfig(StringToRoleConverter stringToRoleConverter) {

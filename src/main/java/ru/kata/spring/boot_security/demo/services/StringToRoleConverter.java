@@ -18,9 +18,7 @@ public class StringToRoleConverter implements Converter<String, Role> {
 
     @Override
     public Role convert(String roleId) {
-        // В этом методе вы должны получить объект Role на основе его ID (из строки)
-        // Используйте ваш сервис RoleService для этого
-        roleService.findById(Integer.parseInt(roleId));
-        return roleService.findById(Integer.parseInt(roleId)); // Пример
+
+        return roleService.findById(Integer.parseInt(roleId));
     }
 }
