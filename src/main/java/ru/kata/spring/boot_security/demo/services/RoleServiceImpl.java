@@ -34,4 +34,9 @@ public class RoleServiceImpl
     public Role findById(int id) {
         return roleDao.findById(id);
     }
+
+    @Override
+    public Role findByName(String name) {
+        return roleDao.findByName(name);
+    }
 }

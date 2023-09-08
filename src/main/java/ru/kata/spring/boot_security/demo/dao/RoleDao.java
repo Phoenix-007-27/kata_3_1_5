@@ -9,4 +9,6 @@ import java.util.Set;
 public interface RoleDao {
     Role findById(int id);
     List<Role> findAll();
+    Role findByName(String name);
+
 }

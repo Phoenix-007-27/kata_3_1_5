@@ -9,6 +9,7 @@ import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 import java.security.Principal;
+import java.util.List;
 
 
 @Controller
@@ -29,6 +30,12 @@ public class AdminController {
         model.addAttribute("admin", userService.findByName(principal.getName()));
         model.addAttribute("roles", roleService.findAll());
         return "index";
+    }
+
+    @ResponseBody
+    @GetMapping("/admin/api")
+    public List<User> getAllApi(){
+        return userService.findAll();
     }
 
     @GetMapping("/admin/info")
