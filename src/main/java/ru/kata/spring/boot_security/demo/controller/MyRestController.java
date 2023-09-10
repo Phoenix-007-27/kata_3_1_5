@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import ru.kata.spring.boot_security.demo.dto.UserDTO;
 import ru.kata.spring.boot_security.demo.dto.UserDTOtoCreate;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -13,7 +12,6 @@ import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.util.UserErrorResponce;
 import ru.kata.spring.boot_security.demo.util.UserNotFoundEx;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +32,7 @@ public class MyRestController {
     @GetMapping("/users")
     public List<UserDTO> getAll() {
         return userService.findAll().stream().map(this::convertToUserDTO).collect(Collectors.toList());
+
     }
 
     @GetMapping("/users/{id}")
@@ -48,14 +47,15 @@ public class MyRestController {
 
     @PostMapping("/create")
     public ResponseEntity<HttpStatus> save(@RequestBody UserDTOtoCreate userDTOtoCreate) {
-        userDTOtoCreate.setRoles(userDTOtoCreate.getRoles().stream().map(r -> roleService.findByName(r.getRole())).collect(Collectors.toSet()));
+//        userDTOtoCreate.setRoles(userDTOtoCreate.getRoles().stream().map(r -> roleService.findByName(r.getRole())).collect(Collectors.toSet()));
         userService.save(convertToUserCreate(userDTOtoCreate));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")
+    @PatchMapping("/update/{id}")
     public ResponseEntity<HttpStatus> update(@PathVariable("id") int id, @RequestBody UserDTOtoCreate userDTOtoCreate) {
-        userDTOtoCreate.setRoles(userDTOtoCreate.getRoles().stream().map(r -> roleService.findByName(r.getRole())).collect(Collectors.toSet()));
+        System.out.println(userDTOtoCreate.toString());
+//        userDTOtoCreate.setRoles(userDTOtoCreate.getRoles().stream().map(r -> roleService.findByName(r.getRole())).collect(Collectors.toSet()));
         userService.update(id, convertToUserCreate(userDTOtoCreate));
         return ResponseEntity.ok(HttpStatus.OK);
     }

@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 public class UserDTOtoCreate {
 
-
     private String username;
     private String lastname;
     private String password;
@@ -16,9 +15,7 @@ public class UserDTOtoCreate {
     private int age;
     private Set<Role> roles;
 
-
     public UserDTOtoCreate(String username, String lastname, String password, String email, int age, Set<Role> roles) {
-
         this.username = username;
         this.lastname = lastname;
         this.password = password;
@@ -29,7 +26,6 @@ public class UserDTOtoCreate {
 
     public UserDTOtoCreate() {
     }
-
 
     public String getPassword() {
         return password;

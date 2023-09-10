@@ -1,13 +1,14 @@
 package ru.kata.spring.boot_security.demo.dto;
 
 import ru.kata.spring.boot_security.demo.model.Role;
+import ru.kata.spring.boot_security.demo.model.User;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UserDTO {
-
 
     private int id;
     private String username;
@@ -15,7 +16,6 @@ public class UserDTO {
     private String email;
     private int age;
     private Set<Role> roles;
-
 
     public UserDTO(int id, String username, String lastname, String email, int age, Set<Role> roles) {
         this.id = id;
@@ -85,6 +85,9 @@ public class UserDTO {
     public Set<String> getRoles() {
         return roles.stream().map(Role::getRole).collect(Collectors.toSet());
     }
+
+
+
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
