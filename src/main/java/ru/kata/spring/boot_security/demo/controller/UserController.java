@@ -27,7 +27,6 @@ public class UserController {
     @GetMapping("/api/auth")
     public UserDTO getAuthUser(Principal principal) {
         return convertToUserDTO(userService.findByName(principal.getName()));
-
     }
 
     public UserDTO convertToUserDTO(User user) {
