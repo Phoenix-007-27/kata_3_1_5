@@ -3,12 +3,15 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.dto.UserDTO;
 import ru.kata.spring.boot_security.demo.mappers.UserMapper;
 import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,14 +38,24 @@ public class UserRestController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> save(@RequestBody @Valid UserDTO userDTOtoCreate) {
-        userService.save(userDTOtoCreate);
+    public ResponseEntity<?> save(@RequestBody @Valid UserDTO userDTO, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            List<String> errorMessages = new ArrayList<>();
+            for (FieldError fieldError : fieldErrors) {
+                errorMessages.add(fieldError.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errorMessages);
+        }
+
+        userService.save(userDTO);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<HttpStatus> update(@PathVariable("id") int id, @RequestBody UserDTO userDTOtoUpdate) {
-        userService.update(id, userDTOtoUpdate);
+    public ResponseEntity<HttpStatus> update(@PathVariable("id") int id, @RequestBody UserDTO userDTO) {
+        userService.update(id, userDTO);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -54,6 +67,6 @@ public class UserRestController {
 
     @ExceptionHandler
     private ResponseEntity<String> handleEx(UserNotFoundException ex) {
-        return new ResponseEntity<>("user not found" + System.currentTimeMillis(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("user not found " + System.currentTimeMillis(), HttpStatus.NOT_FOUND);
     }
 }

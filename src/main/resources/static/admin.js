@@ -135,13 +135,21 @@ async function activeTabContent(tabaId) {
 }
 
 const form_new = document.getElementById('formForNewUser');
+const usernameError = document.getElementById('usernameError');
+const lastnameError = document.getElementById('lastnameError');
+const passwordError = document.getElementById('passwordError');
+const ageError = document.getElementById('ageError');
+const emailError = document.getElementById('emailError');
 
 
 async function newUser() {
-    form_new.addEventListener('submit', addNewUser);
 }
 
+form_new.addEventListener('submit', addNewUser);
+
 async function addNewUser(event) {
+
+
     let urlCreate = 'http://localhost:8080/api/create/';
     event.preventDefault();
     let listOfRole = [];
@@ -151,8 +159,6 @@ async function addNewUser(event) {
                 id: form_new.roleSelect.options[i].value,
                 role: form_new.roleSelect.options[i].text
             });
-
-
         }
     }
     let method = {
@@ -168,12 +174,10 @@ async function addNewUser(event) {
             age: form_new.age.value,
             password: form_new.password.value,
             roles: listOfRole
-
         })
-
     }
-    await fetch(urlCreate, method).then(() => {
-
+    const response = await fetch(urlCreate, method);
+    if (response.ok) {
         form_new.reset();
         getAdminPage();
         activeTabContent('home-tab');
@@ -181,8 +185,40 @@ async function addNewUser(event) {
         activateTab.classList.add('active');
         let deactivateTab = document.getElementById('profile-tab');
         deactivateTab.classList.remove('active');
-    });
-
+    } else {
+        const errorData = await response.json();
+        console.log(errorData)
+        usernameError.innerHTML = '';
+        lastnameError.innerHTML = '';
+        ageError.innerHTML = '';
+        passwordError.innerHTML = '';
+        emailError.innerHTML = '';
+        if (errorData && errorData.length > 0) {
+            errorData.forEach((errorMessage) => {
+                if (errorMessage.includes('username')) {
+                    const errorMessageElement = document.createElement('p');
+                    errorMessageElement.textContent = errorMessage;
+                    usernameError.appendChild(errorMessageElement);
+                } else if (errorMessage.includes('lastname')) {
+                    const errorMessageElement = document.createElement('p');
+                    errorMessageElement.textContent = errorMessage;
+                    lastnameError.appendChild(errorMessageElement);
+                } else if (errorMessage.includes('email')) {
+                    const errorMessageElement = document.createElement('p');
+                    errorMessageElement.textContent = errorMessage;
+                    emailError.appendChild(errorMessageElement);
+                } else if (errorMessage.includes('age')) {
+                    const errorMessageElement = document.createElement('p');
+                    errorMessageElement.textContent = errorMessage;
+                    ageError.appendChild(errorMessageElement);
+                } else if (errorMessage.includes('password')) {
+                    const errorMessageElement = document.createElement('p');
+                    errorMessageElement.textContent = errorMessage;
+                    passwordError.appendChild(errorMessageElement);
+                }
+            });
+        }
+    }
 }
 
 form_new.addEventListener('submit', addNewUser);
