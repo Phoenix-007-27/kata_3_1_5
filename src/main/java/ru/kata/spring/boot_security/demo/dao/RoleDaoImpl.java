@@ -35,8 +35,9 @@ public class RoleDaoImpl implements RoleDao {
     @Override
     public Role findByName(String name) {
         Query query = entityManager.createQuery("SELECT a FROM Role a WHERE a.role like ?1");
-        query.setParameter(1, "%"+name+"%");
-        return (Role) query.getResultList().get(0);
+        query.setParameter(1, name);
+        return  (Role) query.getResultList().get(0);
+
     }
 
 

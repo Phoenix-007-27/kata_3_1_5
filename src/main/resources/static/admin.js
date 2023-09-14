@@ -6,6 +6,7 @@ async function getAdminPage() {
     let page = await fetch(url);
     if (page.ok) {
         let listAllUser = await page.json();
+
         loadTableData(listAllUser);
     } else {
         alert(`Error, ${page.status}`)
@@ -52,6 +53,7 @@ function userNavbarDetails(resUser) {
 }
 
 function loadTableData(listAllUser) {
+    console.log(listAllUser)
     let tableBody = document.getElementById('tbody');
     let dataHtml = '';
     for (let user of listAllUser) {
@@ -134,6 +136,7 @@ async function activeTabContent(tabaId) {
 
 const form_new = document.getElementById('formForNewUser');
 
+
 async function newUser() {
     form_new.addEventListener('submit', addNewUser);
 }
@@ -148,6 +151,8 @@ async function addNewUser(event) {
                 id: form_new.roleSelect.options[i].value,
                 role: form_new.roleSelect.options[i].text
             });
+
+
         }
     }
     let method = {
@@ -177,7 +182,10 @@ async function addNewUser(event) {
         let deactivateTab = document.getElementById('profile-tab');
         deactivateTab.classList.remove('active');
     });
+
 }
+
+form_new.addEventListener('submit', addNewUser);
 
 const form_ed = document.getElementById('formForEditing');
 const id_ed = document.getElementById('id_ed');
@@ -203,10 +211,10 @@ async function editModalData(id) {
 
             const selectedRoles = user.roles;
             const rolesSelect = document.getElementById('rolesForEditing');
-            console.log(user.roles);
-            console.log(rolesSelect.options[0].id);
+            // console.log(user.roles);
+            // console.log(rolesSelect.options[0].id);
             for (let i = 0; i < rolesSelect.options.length; i++) {
-                rolesSelect.options[i].selected = selectedRoles.includes(rolesSelect.options[i].id);
+                rolesSelect.options[i].selected = selectedRoles.includes(rolesSelect.options[i].text);
             }
         })
     } else {
@@ -216,17 +224,18 @@ async function editModalData(id) {
 
 async function editUser() {
     let urlEdit = 'http://localhost:8080/api/update/' + id_ed.value;
+
     let listOfRole = [];
     for (let i = 0; i < form_ed.rolesForEditing.options.length; i++) {
         if (form_ed.rolesForEditing.options[i].selected) {
-            listOfRole.push({
-                id: form_ed.rolesForEditing.options[i].value,
-                name: form_ed.rolesForEditing.options[i].text
-            });
+            listOfRole.push(
+                form_ed.rolesForEditing.options[i].text
+            );
         }
+        console.log(listOfRole)
     }
     let method = {
-        method: 'PATCH',
+        method: 'PUT',
         headers: {
             "Content-Type": "application/json"
         },

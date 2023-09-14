@@ -1,37 +1,26 @@
 package ru.kata.spring.boot_security.demo.model;
 
-
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
 @Table(name = "User")
 public class User {
 
-
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     @Column(name = "username")
     private String username;
-
     @Column(name = "lastname")
     private String lastname;
-
     @Column(name = "email")
     private String email;
-
     @Column(name = "password")
     private String password;
-
     @Column
     private int age;
-
     @ManyToMany()
     @JoinTable(
             name = "user_roles",

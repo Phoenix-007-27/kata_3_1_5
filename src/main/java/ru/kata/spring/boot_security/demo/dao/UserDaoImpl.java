@@ -2,33 +2,23 @@ package ru.kata.spring.boot_security.demo.dao;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.context.annotation.Lazy;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
-
-
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Repository
 public class UserDaoImpl implements UserDao {
 
     private EntityManager entityManager;
-    private RoleDaoImpl roleDao;
+
 
     @Autowired
-    public UserDaoImpl(EntityManager entityManager, RoleDaoImpl roleDao) {
+    public UserDaoImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
-        this.roleDao = roleDao;
+
     }
 
     @Override
