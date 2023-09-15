@@ -9,8 +9,13 @@ import ru.kata.spring.boot_security.demo.model.User;
 @Mapper
 public interface UserMapper {
 
+
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    UserDTO toDto (User user);
-    User toUser (UserDTO userDTO);
+    UserDTO toDto(User user);
+
+    User toUser(UserDTO userDTO);
+
+    Set<Role> map(Set<String> value);
+    Role map(String value);
 }
